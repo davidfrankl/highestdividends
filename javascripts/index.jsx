@@ -12,24 +12,28 @@ var Page = React.createClass({
     var rows = this.props.dataStore.map(function (row) {
       return (
         <tr key={row.get('symbol')}>
-          <td>{row.get('name')}</td>
-          <td>{row.get('symbol')}</td>
-          <td>{row.get('market_cap')}</td>
-          <td>{row.get('yield')}</td>
+          <td className='text'>{row.get('name')}</td>
+          <td className='text'>{row.get('symbol')}</td>
+          <td className='numeric'>{row.get('market_cap')}</td>
+          <td className='numeric'>{row.get('yield')}</td>
         </tr>
       );
     });
 
     return (
       <div>
-        <h1>High Dividends</h1>
+        <h1>Highest Dividends</h1>
+        <ul className='header-menu'>
+          <li>Stocks</li>
+          <li>Partners</li>
+        </ul>
         <table>
           <thead>
             <tr>
-              <th>Company Name</th>
-              <th>Symbol</th>
-              <th>Market Cap</th>
-              <th>Dividend Yield</th>
+              <th className='text' width='200px'>Company Name</th>
+              <th className='text' width='100px'>Symbol</th>
+              <th className='numeric' width='175px'>Market Cap ($B)</th>
+              <th className='numeric' width='175px'>Dividend Yield</th>
             </tr>
           </thead>
           <tbody>

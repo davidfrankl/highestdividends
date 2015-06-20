@@ -9,7 +9,62 @@
 }
 
 body {
+  max-width: 1000px;
+  margin: 0 auto;
+
+  h1 {
+    font-family: "Akzidenz Grotesk Pro-Bold";
+    font-size: 72px;
+    margin-top: 14px;
+    margin-bottom: 0px;
+  }
+
   font-family: "Expert Sans Light";
 
-  h1 { font-family: "Akzidenz Grotesk Pro-Bold" }
+  .header-menu {
+    list-style-type: none;
+    margin: 0 0 24px;
+    padding: 0;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+
+    li {
+      display: inline-block;
+      font-size: 32px;
+      padding: 12px 24px;
+    }
+  }
+
+  table {
+    border-collapse: collapse;
+
+    .numeric {
+      text-align: right;
+    }
+    .text {
+      text-align: left;
+    }
+
+    thead tr {
+      height: 56px;
+
+      th {
+        font-size: 22px;
+        color: rgba(0, 0, 0, .54);
+      }
+    }
+    tbody tr {
+      height: 48px;
+      border-top: 1px solid #eee;
+
+      td {
+        font-size: 24px;
+        color: rgba(0, 0, 0, .87);
+      }
+
+      &:hover {
+        background-color: #eee;
+      }
+    }
+  }
 }
