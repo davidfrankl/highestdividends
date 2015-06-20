@@ -1,0 +1,15 @@
+@font-face {
+  font-family: "Akzidenz Grotesk Pro-Bold";
+  src: url("fonts/AkzidenzGroteskPro-Bold.ttf");
+}
+
+@font-face {
+  font-family: "Expert Sans Light";
+  src: url("fonts/expertsans-light-webfont.ttf");
+}
+
+body {
+  font-family: "Expert Sans Light";
+
+  h1 { font-family: "Akzidenz Grotesk Pro-Bold" }
+}
