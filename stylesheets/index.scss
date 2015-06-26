@@ -51,6 +51,22 @@ body {
       th {
         font-size: 22px;
         color: rgba(0, 0, 0, .54);
+
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+
+        &.selected {
+          color: rgba(0, 0, 0, .87);
+        }
+        i {
+          padding-right: 5px;
+        }
+
+        &:hover {
+          cursor: pointer;
+        }
       }
     }
     tbody tr {

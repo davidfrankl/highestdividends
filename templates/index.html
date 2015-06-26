@@ -1,8 +1,14 @@
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='index.css') }}">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   </head>
   <body>
+    <h1>Highest Dividends</h1>
+    <ul class='header-menu'>
+      <li>Stocks</li>
+      <li>Partners</li>
+    </ul>
     <div id="page"></div>
     <script>data={{ data_json|safe }}</script>
     <script src="{{ url_for('static', filename='index.js') }}"></script>

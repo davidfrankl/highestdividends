@@ -1,15 +1,40 @@
 var React = require('react'),
-    DataStore = require('./data-store');
+    Dispatcher = require('./dispatcher'),
+    Stocks = require('./stocks');
 
 var Page = React.createClass({
   getDefaultProps: function () {
     return {
-      dataStore: new DataStore(data)
+      store: new Stocks(data)
     };
   },
 
+  getInitialState: function () {
+    return {
+      sortField: this.props.store.sortField,
+      sortMultiplier: this.props.store.sortMultiplier
+    }
+  },
+
+  componentDidMount: function () {
+    this.props.store.on('change:emit', this.onStoreChanged, this);
+  },
+
+  onStoreChanged: function () {
+    this.setState({
+      sortField: this.props.store.sortField,
+      sortMultiplier: this.props.store.sortMultiplier
+    });
+  },
+
+  selectColumn: function (selectedColumn) {
+    Dispatcher.dispatch({
+      selectedColumn: selectedColumn
+    });
+  },
+
   render: function () {
-    var rows = this.props.dataStore.map(function (row) {
+    var rows = this.props.store.map(function (row) {
       return (
         <tr key={row.get('symbol')}>
           <td className='text'>{row.get('name')}</td>
@@ -20,27 +45,53 @@ var Page = React.createClass({
       );
     });
 
+    var classNames = {
+      name: 'text',
+      symbol: 'text',
+      market_cap: 'numeric',
+      dividend_yield: 'numeric'
+    }
+    var icons = {
+      name: null,
+      symbol: null,
+      market_cap: null,
+      dividend_yield: null
+    }
+
+    classNames[this.state.sortField] += ' selected';
+
+    if (this.state.sortMultiplier === -1) {
+      icons[this.state.sortField] = <i className='fa fa-long-arrow-up'/>;
+    } else {
+      icons[this.state.sortField] = <i className='fa fa-long-arrow-down'/>;
+    }
+
     return (
-      <div>
-        <h1>Highest Dividends</h1>
-        <ul className='header-menu'>
-          <li>Stocks</li>
-          <li>Partners</li>
-        </ul>
-        <table>
-          <thead>
-            <tr>
-              <th className='text' width='200px'>Company Name</th>
-              <th className='text' width='100px'>Symbol</th>
-              <th className='numeric' width='175px'>Market Cap ($B)</th>
-              <th className='numeric' width='200px'>Dividend Yield (%)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows}
-          </tbody>
-        </table>
-      </div>
+      <table>
+        <thead>
+          <tr>
+            <th className={classNames.name} width='200px' onClick={this.selectColumn.bind(this, 'name')}>
+              {icons.name}
+              Company Name
+            </th>
+            <th className={classNames.symbol} width='100px' onClick={this.selectColumn.bind(this, 'symbol')}>
+              {icons.symbol}
+              Symbol
+            </th>
+            <th className={classNames.market_cap} width='175px' onClick={this.selectColumn.bind(this, 'market_cap')}>
+              {icons.market_cap}
+              Market Cap ($B)
+            </th>
+            <th className={classNames.dividend_yield} width='200px' onClick={this.selectColumn.bind(this, 'dividend_yield')}>
+              {icons.dividend_yield}
+              Dividend Yield (%)
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows}
+        </tbody>
+      </table>
     );
   }
 });
