@@ -4,7 +4,7 @@
   </head>
   <body>
     <div id="page"></div>
-    <script>data={{ data|tojson }}</script>
+    <script>data={{ data_json|safe }}</script>
     <script src="{{ url_for('static', filename='index.js') }}"></script>
   </body>
 </html>

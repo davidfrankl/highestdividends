@@ -14,8 +14,8 @@ var Page = React.createClass({
         <tr key={row.get('symbol')}>
           <td className='text'>{row.get('name')}</td>
           <td className='text'>{row.get('symbol')}</td>
-          <td className='numeric'>{row.get('market_cap')}</td>
-          <td className='numeric'>{row.get('yield')}</td>
+          <td className='numeric'>{row.marketCap()}</td>
+          <td className='numeric'>{row.get('dividend_yield')}</td>
         </tr>
       );
     });
@@ -33,7 +33,7 @@ var Page = React.createClass({
               <th className='text' width='200px'>Company Name</th>
               <th className='text' width='100px'>Symbol</th>
               <th className='numeric' width='175px'>Market Cap ($B)</th>
-              <th className='numeric' width='175px'>Dividend Yield</th>
+              <th className='numeric' width='200px'>Dividend Yield (%)</th>
             </tr>
           </thead>
           <tbody>
