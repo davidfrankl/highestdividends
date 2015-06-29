@@ -3,7 +3,7 @@ app = Flask(__name__)
 
 
 @app.route("/")
-def hello():
+def index():
     data_json = open('nyse.json', 'r').read()
 
     return render_template('index.html', data_json=data_json)
