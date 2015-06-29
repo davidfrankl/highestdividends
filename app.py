@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    data_json = open('nyse.json', 'r').read()
+    data_json = open('all.json', 'r').read()
 
     return render_template('index.html', data_json=data_json)
 

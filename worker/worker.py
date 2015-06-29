@@ -1,11 +1,12 @@
 import requests
 import csv
 import json
+from math import ceil
 
 
 def parse_number(string):
-    if string == u'N/A':
-        return string
+    if string == u'N/A' or string == u'n/a':
+        return 'N/A'
     elif string[-1] == u'B':
         return float(string[:-1]) * pow(10, 9)
     elif string[-1] == u'M':
@@ -14,40 +15,58 @@ def parse_number(string):
         return float(string)
 
 
-def get_nyse_components():
-    url = 'http://www1.nyse.com/indexes/nyaindex.csv'
+def get_qual_datas(exchange_name):
+    url = 'http://www.nasdaq.com/screening/companies-by-industry.aspx?exchange='
+    url += exchange_name
+    url += '&render=download'
+
     res = requests.get(url)
 
-    # data: Name, Symbol, Country, ICB, Industry, SUP SEC, SEC, SUB SEC
-    lines = res.text.split('\n')[2:-1]
+    # Symbol, Name, Price, -, -, -, Industry
+    lines = list(csv.reader(res.text.split('\n'), delimiter=',', quotechar='"'))[1:-1]
+    return map(lambda l: l + [exchange_name], lines)
 
-    name_index, ticker_index, country_index, industry_index = 0, 1, 2, 4
 
-    qual_datas = list(csv.reader(lines, delimiter=',', quotechar='"'))
-    symbols = [l[ticker_index] for l in qual_datas]
+def get_quant_datas(symbols, batch_idx):
+    start_idx = batch_idx * 1000
+    end_idx = (batch_idx + 1) * 1000
 
-    # data: Last Price, Market Cap, Dividend Yield, Average Daily Volume
-    url1 = 'http://finance.yahoo.com/d/quotes.csv?s=' + '+'.join(symbols[:1000]) + '&f=l1j1ya2'
-    url2 = 'http://finance.yahoo.com/d/quotes.csv?s=' + '+'.join(symbols[1000:]) + '&f=l1j1ya2'
-    res1 = requests.get(url1)
-    res2 = requests.get(url2)
-    lines = res1.text + res2.text
+    url = 'http://finance.yahoo.com/d/quotes.csv?s='
+    url += '+'.join(symbols[start_idx:end_idx])
+    url += '&f=j1ya2'
 
-    quant_datas = map(lambda l: l.split(','), lines.split('\n'))
+    res = requests.get(url)
+    return map(lambda l: l.split(','), res.text.split('\n')[:-1])
+
+
+def get_data():
+    qual_datas = []
+
+    qual_datas += get_qual_datas('NASDAQ')
+    qual_datas += get_qual_datas('NYSE')
+
+    symbol_idx, name_idx, price_idx, industry_idx, exchange_name_idx = 0, 1, 2, 6, 10
+
+    symbols = map(lambda qual_data: qual_data[symbol_idx], qual_datas)
+    quant_datas = []
+    for batch_idx in range(int(ceil(len(symbols) / 1000.))):
+        quant_datas += get_quant_datas(symbols, batch_idx)
+
+    market_cap_idx, dividend_yield_idx, avg_volume_idx = 0, 1, 2
 
     collection_data = []
     for qual_data, quant_data in zip(qual_datas, quant_datas):
         collection_data.append({
-            'name': qual_data[name_index],
-            'symbol': qual_data[ticker_index],
-            'country': qual_data[country_index],
-            'industry': qual_data[industry_index],
-            'price': parse_number(quant_data[0]),
-            'market_cap': parse_number(quant_data[1]),
-            'dividend_yield': parse_number(quant_data[2]),
-            'avg_volume': parse_number(quant_data[3])
+            'symbol': qual_data[symbol_idx],
+            'name': qual_data[name_idx],
+            'price': parse_number(qual_data[price_idx]),
+            'industry': qual_data[industry_idx],
+            'exchange_name': qual_data[exchange_name_idx],
+            'market_cap': parse_number(quant_data[market_cap_idx]),
+            'dividend_yield': parse_number(quant_data[dividend_yield_idx]),
+            'avg_volume': parse_number(quant_data[avg_volume_idx])
         })
 
-    json.dump(collection_data, open('nyse.json', 'w'))
+    json.dump(collection_data, open('all.json', 'w'))
 
-get_nyse_components()
+get_data()
