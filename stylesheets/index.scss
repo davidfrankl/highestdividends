@@ -76,11 +76,33 @@ body {
       td {
         font-size: 24px;
         color: rgba(0, 0, 0, .87);
+
+        max-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       &:hover {
         background-color: #eee;
       }
+    }
+  }
+
+  .pagination {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    padding: 20px 0;
+    font-size: 24px;
+    text-align: right;
+    color: rgba(0, 0, 0, .54);
+
+    i {
+      padding-left: 40px;
+      cursor: pointer;
     }
   }
 }
