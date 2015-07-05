@@ -35,6 +35,24 @@ body {
     }
   }
 
+  .filters {
+
+    &:after {
+      visibility: hidden;
+      display: block;
+      font-size: 0;
+      content: " ";
+      clear: both;
+      height: 0;
+    }
+
+    .filter {
+      display: inline-block;
+      margin-left: 12px;
+      float: right;
+    }
+  }
+
   table {
     border-collapse: collapse;
 

@@ -14,7 +14,8 @@ var Page = React.createClass({
       sortField: this.props.store.sortField,
       sortMultiplier: this.props.store.sortMultiplier,
       page: 0,
-      itemsPerPage: 50
+      itemsPerPage: 50,
+      displayedExchanges: this.props.store.displayedExchanges
     }
   },
 
@@ -31,7 +32,8 @@ var Page = React.createClass({
 
   selectColumn: function (selectedColumn) {
     Dispatcher.dispatch({
-      selectedColumn: selectedColumn
+      actionType: 'sort',
+      item: selectedColumn
     });
   },
 
@@ -58,6 +60,13 @@ var Page = React.createClass({
         page: this.state.page + inc
       });
     }
+  },
+
+  toggleExchange: function (exchangeName) {
+    Dispatcher.dispatch({
+      actionType: 'toggleExchange',
+      item: exchangeName
+    });
   },
 
   render: function () {
@@ -96,35 +105,47 @@ var Page = React.createClass({
 
     return (
       <div>
-        <table>
-          <thead>
-            <tr>
-              <th className={classNames.name} width='500px' onClick={this.selectColumn.bind(this, 'name')}>
-                {icons.name}
-                Company Name
-              </th>
-              <th className={classNames.symbol} width='100px' onClick={this.selectColumn.bind(this, 'symbol')}>
-                {icons.symbol}
-                Symbol
-              </th>
-              <th className={classNames.market_cap} width='200px' onClick={this.selectColumn.bind(this, 'market_cap')}>
-                {icons.market_cap}
-                Market Cap ($B)
-              </th>
-              <th className={classNames.dividend_yield} width='200px' onClick={this.selectColumn.bind(this, 'dividend_yield')}>
-                {icons.dividend_yield}
-                Dividend Yield (%)
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows}
-          </tbody>
-        </table>
-        <div className='pagination'>
-          {this.getPaginationString()}
-          <i className='fa fa-chevron-left' onClick={this.changePage.bind(this, -1)}/>
-          <i className='fa fa-chevron-right' onClick={this.changePage.bind(this, 1)}/>
+        <div className='filters'>
+          <div className='filter'>
+            <label>NASDAQ</label>
+            <input type="checkbox" checked={this.state.displayedExchanges.NASDAQ} onChange={this.toggleExchange.bind(this, 'NASDAQ')}/>
+          </div>
+          <div className='filter'>
+            <label>NYSE</label>
+            <input type="checkbox" checked={this.state.displayedExchanges.NYSE} onChange={this.toggleExchange.bind(this, 'NYSE')}/>
+          </div>
+        </div>
+        <div>
+          <table>
+            <thead>
+              <tr>
+                <th className={classNames.name} width='500px' onClick={this.selectColumn.bind(this, 'name')}>
+                  {icons.name}
+                  Company Name
+                </th>
+                <th className={classNames.symbol} width='100px' onClick={this.selectColumn.bind(this, 'symbol')}>
+                  {icons.symbol}
+                  Symbol
+                </th>
+                <th className={classNames.market_cap} width='200px' onClick={this.selectColumn.bind(this, 'market_cap')}>
+                  {icons.market_cap}
+                  Market Cap ($B)
+                </th>
+                <th className={classNames.dividend_yield} width='200px' onClick={this.selectColumn.bind(this, 'dividend_yield')}>
+                  {icons.dividend_yield}
+                  Dividend Yield (%)
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows}
+            </tbody>
+          </table>
+          <div className='pagination'>
+            {this.getPaginationString()}
+            <i className='fa fa-chevron-left' onClick={this.changePage.bind(this, -1)}/>
+            <i className='fa fa-chevron-right' onClick={this.changePage.bind(this, 1)}/>
+          </div>
         </div>
       </div>
     );

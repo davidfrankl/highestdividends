@@ -18,6 +18,10 @@ var Stocks = Backbone.Collection.extend({
   model: Stock,
   sortField: 'dividend_yield',
   sortMultiplier: 1,
+  displayedExchanges: {
+    'NASDAQ': true,
+    'NYSE': true
+  },
 
   textComparator: function (aVal, bVal) {
     aVal = aVal.toLowerCase();
@@ -61,15 +65,32 @@ var Stocks = Backbone.Collection.extend({
     this.sort();
   },
 
-  onDispatch: function (action) {
-    if (action.selectedColumn === this.sortField) {
+  toggleExchange: function (exchangeName) {
+    this.displayedExchanges[exchangeName] = !this.displayedExchanges[exchangeName];
+    this.reset(data);
+    this.reset(this.filter(function (e) {
+      return this.displayedExchanges[e.get('exchange_name')];
+    }, this));
+  },
+
+  sortBy: function (selectedColumn) {
+    if (selectedColumn === this.sortField) {
       this.sortMultiplier *= -1;
     } else {
       this.sortMultiplier = 1;
     }
 
-    this.sortField = action.selectedColumn;
+    this.sortField = selectedColumn;
     this.sort();
+  },
+
+  onDispatch: function (action) {
+    if (action.actionType === 'toggleExchange') {
+      this.toggleExchange(action.item);
+    } else if (action.actionType === 'sort') {
+      this.sortBy(action.item);
+    }
+
     this.trigger('change:emit');
   }
 });
