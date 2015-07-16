@@ -1,5 +1,5 @@
 module.exports = function (grunt) {
-    var debug = (process.env.PG_CONFIG || 'dev') === 'dev';
+    var debug = (process.env.DEBUG || 'false') === 'true';
 
     grunt.initConfig({
         sass: {
