@@ -19,7 +19,8 @@ module.exports = function (grunt) {
         browserify: {
             options: {
                 transform: [ require('grunt-react').browserify ],
-                browserifyOptions: {debug: debug}
+                browserifyOptions: {debug: debug},
+                exclude: ['jquery']
             },
             index: {
                 src: 'javascripts/index.jsx',

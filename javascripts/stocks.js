@@ -1,8 +1,5 @@
 var Backbone = require('backbone'),
-    jQuery = require('jquery'),
     Dispatcher = require('./dispatcher');
-
-Backbone.$ = jQuery;
 
 var Stock = Backbone.Model.extend({
   marketCap: function () {
