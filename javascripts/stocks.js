@@ -1,18 +1,7 @@
 var Backbone = require('backbone'),
     Dispatcher = require('./dispatcher');
 
-var Stock = Backbone.Model.extend({
-  marketCap: function () {
-    if (isNaN(this.get('market_cap'))) {
-      return this.get('market_cap');
-    } else {
-      return Math.floor(this.get('market_cap') / Math.pow(10, 9) * 100) / 100;
-    }
-  }
-});
-
 var Stocks = Backbone.Collection.extend({
-  model: Stock,
   sortField: 'dividend_yield',
   sortMultiplier: 1,
   displayedExchanges: {

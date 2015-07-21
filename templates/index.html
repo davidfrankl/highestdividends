@@ -1,6 +1,6 @@
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='index.css') }}">
+    <link rel="stylesheet" type="text/css" href="/static/index.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   </head>
   <body>
@@ -9,8 +9,8 @@
       <li>Stocks</li>
       <li>Partners</li>
     </ul>
-    <div id="page"></div>
-    <script>data={{ data_json|safe }}</script>
-    <script src="{{ url_for('static', filename='index.js') }}"></script>
+    <div id="page"><h2>Loading Data...</h2></div>
+    <script src="/static/data.js"></script>
+    <script src="/static/index.js"></script>
   </body>
 </html>

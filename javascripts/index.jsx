@@ -76,7 +76,7 @@ var Page = React.createClass({
         <tr key={row.get('symbol')}>
           <td className='text'>{row.get('name')}</td>
           <td className='text'>{row.get('symbol')}</td>
-          <td className='numeric'>{row.marketCap()}</td>
+          <td className='numeric'>{row.get('market_cap')}</td>
           <td className='numeric'>{row.get('dividend_yield')}</td>
         </tr>
       );
