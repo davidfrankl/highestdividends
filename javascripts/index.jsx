@@ -31,6 +31,10 @@ var Page = React.createClass({
   },
 
   selectColumn: function (selectedColumn) {
+    if (event.target instanceof HTMLInputElement) {
+      return;
+    }
+
     Dispatcher.dispatch({
       actionType: 'sort',
       item: selectedColumn
@@ -69,8 +73,22 @@ var Page = React.createClass({
     });
   },
 
+  filterBySearch: function (elem) {
+    if (!this.state.searchString) {
+      return true;
+    }
+
+    var name = elem.get('name').toLowerCase();
+    return name.indexOf(this.state.searchString) !== -1;
+  },
+
+  search: function () {
+    this.setState({searchString: event.target.value.toLowerCase()});
+  },
+
   render: function () {
-    var rows = this.props.store.slice(this.first(), this.last())
+    var rows = this.props.store.filter(this.filterBySearch)
+                               .slice(this.first(), this.last())
                                .map(function (row) {
       return (
         <tr key={row.get('symbol')}>
@@ -122,6 +140,9 @@ var Page = React.createClass({
                 <th className={classNames.name} width='500px' onClick={this.selectColumn.bind(this, 'name')}>
                   {icons.name}
                   Company Name
+                  <div className='search'>
+                    <input type='text' placeholder='Search...' onChange={this.search}/>
+                  </div>
                 </th>
                 <th className={classNames.symbol} width='100px' onClick={this.selectColumn.bind(this, 'symbol')}>
                   {icons.symbol}

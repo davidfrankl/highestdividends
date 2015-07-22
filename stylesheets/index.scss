@@ -90,6 +90,19 @@ body {
         &:hover {
           cursor: pointer;
         }
+
+        .search {
+          display: inline-block;
+          padding-left: 20px;
+
+          input {
+            border-radius: 16px;
+            font-size: 20px;
+            font-family: "Expert Sans Light";
+            border: 1px solid #eee;
+            padding-left: 13px;
+          }
+        }
       }
     }
     tbody tr {
