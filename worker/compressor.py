@@ -74,5 +74,3 @@ def compress_data():
 
     compressed_string = check_output(['uglifyjs', 'compressed.js'])
     open('compressed.js', 'w').write(compressed_string)
-
-compress_data()

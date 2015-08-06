@@ -68,5 +68,3 @@ def get_data():
         })
 
     json.dump(collection_data, open('all.json', 'w'))
-
-get_data()
